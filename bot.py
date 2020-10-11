@@ -1,38 +1,45 @@
 import discord
 import os
 import time
+import json
+import asyncio
 from discord.ext import commands
 
-# this specifies what extensions to load when the bot starts up
-startup_extensions = ['commands']
+with open("config.json", "r") as f:
+    config = json.load(f)
 
-token = open("token.txt","r").readline()
-prefix = open("prefix.txt","r").readline()
-client = commands.Bot(command_prefix = prefix)
-client.remove_command('help')
+bot = commands.Bot(
+    command_prefix = config['prefix']
+    )
+bot.remove_command('help')
 
-@client.event
+# Startup
+@bot.event
 async def on_ready():
     print('Bot is ready.')
 
-@client.command(aliases=['latency'])
-async def ping(ctx):
-    await ctx.send(f'Pong! My ping is {round(client.latency * 1000)}ms')
+    if "streaming" in config["activity_type"]:
+        await bot.change_presence(activity=discord.Streaming(name=config["activity"], url="https://www.twitch.tv/toucanee"))
+        print("Status changed to streaming {}".format(config["activity"]))
 
-@client.command()
-async def load(ctx, extension):
-    client.load_extension(f'commands.{extension}')
+    elif "playing" in config["activity_type"]:
+        await bot.change_presence(activity=discord.Game(name=config["activity"]))
+        print("Status changed to playing {}".format(config["activity"]))
 
-#for filename in os.listdir('./commands'):
-#    if filename.endswith('.py'):
-#        client.load_extension(f'cogs.{filename[:-3]}')
+    elif "watching" in config["activity_type"]:
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=config["activity"]))
+        print("Status changed to watching {}".format(config["activity"]))
 
-@client.command(pass_context=True, aliases=['commands'])
-async def help(ctx):
-    embed = discord.Embed(title = 'Commands', color = 0x80ceff)
-    embed.add_field(name = 'Ping', value = 'Pong!', inline = True)
-    embed.add_field(name = 'Setup', value = 'Configure the scheduled voice channels', inline = True)
+    elif "listening" in config["activity_type"]:
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=config["activity"]))
+        print("Status changed to listening to {}".format(config["activity"]))
 
-    await ctx.send(embed=embed)
+for file in os.listdir("./cogs"):
+    if file.endswith(".py"):
+        name = file[:-3]
+        bot.load_extension(f"cogs.{name}")
 
-client.run(token)
+try:
+    bot.run(config['token'])
+except Exception as err:
+    print(f'Error: {err}')
