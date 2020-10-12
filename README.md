@@ -1,4 +1,5 @@
 # Schedule-Chan
+[![Run on Repl.it](https://repl.it/badge/github/toucanee/Schedule-Chan)](https://repl.it/github/toucanee/Schedule-Chan)
 A Discord bot for everything time based. 
 
 ## What does this include?
