@@ -21,24 +21,21 @@ class Information(commands.Cog):
         # If cog is not specified by the user, we list all cogs and commands
 
         if cog == 'all':
+            help_embed = discord.Embed(
+                title='Help',
+                color=0x43bab8
+            )
+            help_embed.set_footer(
+                text=f'Requested by {ctx.message.author.name}',
+                icon_url=ctx.author.avatar_url
+            )
             for cog in cogs:
                 # Get a list of all commands under each cog
-                help_embed = discord.Embed(
-                    title='Help',
-                    color=0x43bab8
-                )
-                help_embed.set_footer(
-                    text=f'Requested by {ctx.message.author.name}',
-                    icon_url=ctx.author.avatar_url
-                )
- 
                 cog_commands = self.bot.get_cog(cog).get_commands()
                 commands_list = ''
                 for comm in cog_commands:
                     commands_list += f'**{comm.name}** - {comm.description}\n'
- 
-                # Add the cog's details to the embed.
- 
+                    # Add the cog's details to the embed.
                 help_embed.add_field(
                     name=cog.capitalize(),
                     value=commands_list,
@@ -47,11 +44,8 @@ class Information(commands.Cog):
                # Also added a blank field '\u200b' is a whitespace character.
             pass
         else:
-
             # If the cog was specified
-
             lower_cogs = [c.lower() for c in cogs]
-
             # If the cog actually exists.
             if cog.lower() in lower_cogs:
                 help_embed = discord.Embed(
@@ -62,11 +56,9 @@ class Information(commands.Cog):
                     text=f'Requested by {ctx.message.author.name}',
                     icon_url=ctx.author.avatar_url
                 )
-
                 # Get a list of all commands in the specified cog
                 commands_list = self.bot.get_cog(cogs[ lower_cogs.index(cog.lower()) ]).get_commands()
                 help_text=''
- 
                 # Add details of each command to the help text
                 # Command Name
                 # Description
@@ -75,7 +67,6 @@ class Information(commands.Cog):
                 # Format
                 for command in commands_list:
                     help_text += f'**{command.name}** - {command.description}\n'
-
                     # Also add aliases, if there are any
                     if len(command.aliases) > 0:
                         help_text += f'Aliases: `{"`, `".join(command.aliases)}`\n'
