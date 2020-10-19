@@ -16,10 +16,12 @@ bot.remove_command('help')
 # Startup
 @bot.event
 async def on_ready():
+    # Display when the bot is up.
     print('Bot is ready.')
 
+    # Check the config and set the status accordingly.
     if "streaming" in config["activity_type"]:
-        await bot.change_presence(activity=discord.Streaming(name=config["activity"], url="https://www.twitch.tv/toucanee"))
+        await bot.change_presence(activity=discord.Streaming(name=config["activity"], url=config["streaming_url"]))
         print("Status changed to streaming {}".format(config["activity"]))
 
     elif "playing" in config["activity_type"]:

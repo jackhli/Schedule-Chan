@@ -3,7 +3,12 @@ import os
 import psutil
 import json
 import time
+import datetime
 from discord.ext import commands
+from datetime import datetime
+from datetime import timedelta
+
+startTime = time.time()
 
 class Information(commands.Cog):
     def __init__(self, bot):
@@ -107,9 +112,32 @@ class Information(commands.Cog):
         )
         
         about_embed.set_footer(text="Made by dinglemyberry#6969")
-
-
         await ctx.send(embed=about_embed)
+    
+    @commands.command(description="Shows the bot uptime.")
+    async def botinfo(self, ctx):
+        # Get all users in all servers the bot is in.
+        activeServers = self.bot.guilds
+        botUsers = 0
+        for s in activeServers:
+            botUsers += len(s.members)
+        # Get the current uptime.
+        currentTime = time.time()
+        differenceUptime = int(round(currentTime - startTime))
+        uptime = str(timedelta(seconds = differenceUptime))
+        # Make the embed for the message.
+        botinfo = discord.Embed(
+            title="Bot info",
+            color=0x43bab8,
+            timestamp=datetime.now(),
+            description=f"**Server Count:** {len(self.bot.guilds)}\n**Bot Users:** {botUsers}\n**Bot Uptime:** {uptime}"
+        )
+        botinfo.set_footer(
+            text=f'Requested by {ctx.message.author.name}',
+            icon_url=ctx.author.avatar_url
+        )
+        await ctx.send(embed=botinfo)
+
 
 def setup(bot):
     bot.add_cog(Information(bot))

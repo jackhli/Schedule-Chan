@@ -25,7 +25,7 @@ class Time(commands.Cog):
             time_embed = discord.Embed(
                 title=f"Current Time in {place.title()}",
                 color=0x43bab8,
-                description=f"Current time in `{place.title()}` is:\n**{time}**\n**{stripdate.strftime('%A')}, {stripdate.strftime('%B')} {stripdate.strftime('%d')}, {stripdate.strftime('%Y')}**"
+                description=f"The current time in `{place.title()}` is:\n**{time}**\n**{stripdate.strftime('%A')}, {stripdate.strftime('%B')} {stripdate.strftime('%d')}, {stripdate.strftime('%Y')}**"
             )
             time_embed.set_footer(
                 text=f'Requested by {ctx.message.author.name}',
@@ -38,7 +38,7 @@ class Time(commands.Cog):
             time_embed = discord.Embed(
                 title=f"Current Time",
                 color=0x43bab8,
-                description=f"Current time is:\n**{stlocalTime}**\n**{localDate.strftime('%A')}, {localDate.strftime('%B')} {localDate.strftime('%d')}, {localDate.strftime('%Y')}**"
+                description=f"The current time is:\n**{stlocalTime}**\n**{localDate.strftime('%A')}, {localDate.strftime('%B')} {localDate.strftime('%d')}, {localDate.strftime('%Y')}**"
             )
             time_embed.set_footer(
                 text=f'Requested by {ctx.message.author.name}',
