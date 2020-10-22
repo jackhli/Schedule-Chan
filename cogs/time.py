@@ -9,6 +9,7 @@ import re
 from datetime import datetime
 from datetime import date
 from discord.ext import commands
+import json
 
 class Time(commands.Cog):
     def __init__(self, bot):
@@ -126,6 +127,35 @@ class Time(commands.Cog):
             )
             await user.send(embed=embedEnd2)
             return
+
+    @commands.command(aliases=["schedulechan", "sc"])
+    async def schechan(self, ctx):
+        errorEmbed = discord.Embed(
+            color=0xff4f4f
+        )
+        setupEmbed1 = discord.Embed(
+            title="Setup",
+            color=0x43bab8,
+            description="Hey! What channel would you like to schedule?"
+        )
+        await ctx.send(embed=setupEmbed1)
+        channel = self.bot.wait_for_message(author=ctx.message.author, timeout=30)
+        if "setup1" in locals():
+            await ctx.message.delete(setupEmbed1)
+            setupEmbed2 = discord.Embed(
+                title="Setup",
+                color=0x43bab8,
+                description="What time do you want this channel to appear?"
+            )
+            await ctx.send(embed=setupEmbed2)
+            orgTime = self.bot.wait_for_message(author=ctx.message.author, timeout=30)
+        else:
+            errorEmbed.add_field(
+                name="Error",
+                value="You didn't respond in time!"
+            )
+            await asyncio.sleep(5)
+            await ctx.message.delete(errorEmbed)
 
 def setup(bot):
     bot.add_cog(Time(bot))
