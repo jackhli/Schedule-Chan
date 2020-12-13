@@ -130,32 +130,51 @@ class Time(commands.Cog):
 
     @commands.command(aliases=["schedulechan", "sc"])
     async def schechan(self, ctx):
+        await ctx.message.delete()
         errorEmbed = discord.Embed(
             color=0xff4f4f
         )
+        
+        # 1st Setup Question
         setupEmbed1 = discord.Embed(
             title="Setup",
             color=0x43bab8,
             description="Hey! What channel would you like to schedule?"
         )
-        await ctx.send(embed=setupEmbed1)
-        channel = self.bot.wait_for_message(author=ctx.message.author, timeout=30)
-        if "setup1" in locals():
-            await ctx.message.delete(setupEmbed1)
-            setupEmbed2 = discord.Embed(
-                title="Setup",
-                color=0x43bab8,
-                description="What time do you want this channel to appear?"
-            )
-            await ctx.send(embed=setupEmbed2)
-            orgTime = self.bot.wait_for_message(author=ctx.message.author, timeout=30)
-        else:
+        sentSetupEmbed1 = await ctx.send(embed=setupEmbed1)
+        try:
+            channel = await self.bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=15)
+        except asyncio.TimeoutError:
+            await sentSetupEmbed1.delete()
             errorEmbed.add_field(
                 name="Error",
                 value="You didn't respond in time!"
             )
-            await asyncio.sleep(5)
-            await ctx.message.delete(errorEmbed)
+            await ctx.send(embed=errorEmbed, delete_after=5.0)
+        else:
+            # 2nd Setup Question
+            # await ctx.send(f'Hi {channel.content}!')
+            setupEmbed2 = discord.Embed(
+                title="Setup",
+                color=0x43bab8,
+                description="What time do you want this channel to appear?\n**Please use the format of hh:mm AM/PM**"
+            )
+            sentSetupEmbed2 = await ctx.send(embed=setupEmbed2)
+            try:
+                time = await self.bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=15)
+            except asyncio.TimeoutError:
+                await sentSetupEmbed1.delete()
+                errorEmbed.add_field(
+                    name="Error",
+                    value="You didn't respond in time!"
+                )
+                await ctx.send(embed=errorEmbed, delete_after=5.0)
+            else:
+                setupEmbed3 = discord.Embed(
+                    title="Setup",
+                    color=0x43bab8,
+                    description="What time do you want this channel to disappear?\n**Please use the format of hh:mm AM/PP**"
+                )
 
 def setup(bot):
     bot.add_cog(Time(bot))
