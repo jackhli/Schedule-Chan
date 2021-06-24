@@ -2,6 +2,8 @@
 
 [![Run on Repl.it](https://repl.it/badge/github/toucanee/Schedule-Chan)](https://repl.it/github/toucanee/Schedule-Chan)
 
+## I HAVE STOPPED CREATION OF THIS BOT. I HAVE REFINED MY ORIGINAL IDEA AND MOVED IT TO [sbh](https://github.com/TeamSadge/sbh) REPOSITORY. THERE WILL BE NO UPDATES TO THIS REPOSITORY UNTIL FURTHER NOTICE.
+
 A Discord bot for everything time based. 
 
 ## What does this include?
